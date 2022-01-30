@@ -152,7 +152,24 @@ def test_yoloLoss():
 
     tf.print(loss, summarize = -1)
 
+def test_yoloClassLoss():
+    truthTensor = np.zeros((1,7,7,25), dtype=np.float32)
+    predTensor = -9999 * np.ones((1,7,7,20), dtype=np.float32)
 
+    r, c = np.random.randint(1, 6, 2)
+
+    randClass = np.random.randint(1, 19)
+
+    truthTensor[0, r, c, randClass] = 1
+    truthTensor[0, r, c, C + 4 : C + 5] = [1]
+    
+    predTensor[0, r, c, randClass] = -9999
+    #predTensor[0, r, c, randClass + 1] = 0
+    #predTensor[0, r+1, c, randClass] = 1
+
+    loss = yoloClassLoss(truthTensor, predTensor)
+
+    tf.print(loss, summarize = -1)
 
 if __name__ == '__main__':
     #test_getAnnotations()
@@ -160,4 +177,5 @@ if __name__ == '__main__':
     #test_getTrainVal()
     #test_getVOCData()
     #test_calcIOU()
-    test_yoloLoss()
+    #test_yoloLoss()
+    test_yoloClassLoss()
